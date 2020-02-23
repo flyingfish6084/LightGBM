@@ -214,7 +214,7 @@ void GBDT::Bagging(int iter) {
   if ((bag_data_cnt_ < num_data_ && iter % config_->bagging_freq == 0) ||
       need_re_bagging_) {
     need_re_bagging_ = false;
-    auto left_cnt = bagging_runner_.Run(
+    auto left_cnt = bagging_runner_.Run<true>(
         num_data_,
         [=](int, data_size_t cur_start, data_size_t cur_cnt, data_size_t* left,
             data_size_t*) {

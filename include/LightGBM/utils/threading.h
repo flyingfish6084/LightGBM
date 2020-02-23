@@ -105,14 +105,20 @@ class ParallelPartitionRunner {
     }
   }
 
+  template<bool FORCE_SIZE>
   INDEX_T Run(
       INDEX_T cnt,
       const std::function<INDEX_T(int, INDEX_T, INDEX_T, INDEX_T*, INDEX_T*)>& func,
       INDEX_T* out) {
     int nblock = 1;
     INDEX_T inner_size = cnt;
-    Threading::BlockInfoForceSize<INDEX_T>(num_threads_, cnt, min_block_size_,
-                                           &nblock, &inner_size);
+    if (FORCE_SIZE) {
+      Threading::BlockInfoForceSize<INDEX_T>(num_threads_, cnt, min_block_size_,
+                                             &nblock, &inner_size);
+    } else {
+      Threading::BlockInfo<INDEX_T>(num_threads_, cnt, min_block_size_, &nblock,
+                                    &inner_size);
+    }
 
     OMP_INIT_EX();
 #pragma omp parallel for schedule(static, 1)

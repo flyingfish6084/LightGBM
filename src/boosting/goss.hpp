@@ -57,7 +57,7 @@ class GOSS: public GBDT {
       Log::Fatal("Cannot use bagging in GOSS");
     }
     Log::Info("Using GOSS");
-
+    balanced_bagging_ = false;
     bag_data_indices_.resize(num_data_);
     bagging_runner_.ReSize(num_data_);
 
