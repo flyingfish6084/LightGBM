@@ -200,9 +200,9 @@ data_size_t GBDT::BalancedBaggingHelper(data_size_t start, data_size_t cnt,
                   config_->neg_bagging_fraction;
     }
     if (is_in_bag) {
-      buffer[cur_left_cnt++] = start + i;
+      buffer[cur_left_cnt++] = cur_idx;
     } else {
-      buffer[--cur_right_pos] = start + i;
+      buffer[--cur_right_pos] = cur_idx;
     }
   }
   return cur_left_cnt;
@@ -747,7 +747,8 @@ void GBDT::ResetBaggingConfig(const Config* config, bool is_change_dataset) {
       bagging_rands_.emplace_back(config_->bagging_seed + i);
     }
 
-    double average_bag_rate = (bag_data_cnt_ / num_data_) / config->bagging_freq;
+    double average_bag_rate =
+        (static_cast<double>(bag_data_cnt_) / num_data_) / config->bagging_freq;
     is_use_subset_ = false;
     const int group_threshold_usesubset = 100;
     if (tree_learner_->IsHistColWise() && average_bag_rate <= 0.5
